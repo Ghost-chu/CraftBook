@@ -27,6 +27,7 @@ import com.sk89q.craftbook.core.mechanic.MechanicCommands;
 import com.sk89q.craftbook.mechanics.headdrops.HeadDropsCommands;
 import com.sk89q.craftbook.util.ItemSyntax;
 import com.sk89q.minecraft.util.commands.CommandException;
+import com.sk89q.worldedit.command.util.CommandPermissionsConditionGenerator;
 import com.sk89q.worldedit.util.paste.ActorCallbackPaste;
 import com.sk89q.worldedit.util.report.ReportList;
 import com.sk89q.worldedit.util.report.SystemInfoReport;
@@ -55,10 +56,12 @@ import com.sk89q.minecraft.util.commands.CommandPermissions;
 import com.sk89q.minecraft.util.commands.CommandPermissionsException;
 import com.sk89q.minecraft.util.commands.NestedCommand;
 import org.bukkit.entity.Player;
+import org.enginehub.piston.annotation.CommandContainer;
 
-public class TopLevelCommands {
+@CommandContainer(superTypes = CommandPermissionsConditionGenerator.Registration.class)
+public class CraftBookCommands {
 
-    public TopLevelCommands(CraftBookPlugin plugin) {
+    public CraftBookCommands(CraftBookPlugin plugin) {
     }
 
     @Command(aliases = {"craftbook", "cb"}, desc = "CraftBook Plugin commands")
