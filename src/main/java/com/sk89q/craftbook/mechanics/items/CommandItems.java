@@ -2,6 +2,7 @@ package com.sk89q.craftbook.mechanics.items;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.CraftBookPlayer;
 import com.sk89q.craftbook.bukkit.CraftBookPlugin;
@@ -73,6 +74,10 @@ public class CommandItems extends AbstractCraftBookMechanic {
     private Map<UUID, List<ItemStack>> deathPersistItems = Maps.newHashMap();
 
     private boolean doChat = false;
+
+    public CommandItems(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     public CommandItemDefinition getDefinitionByName(String name) {
 

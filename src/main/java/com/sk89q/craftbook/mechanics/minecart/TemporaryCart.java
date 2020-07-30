@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics.minecart;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.CraftBookPlayer;
 import com.sk89q.craftbook.bukkit.CraftBookPlugin;
@@ -26,6 +27,10 @@ import java.util.Set;
 public class TemporaryCart extends AbstractCraftBookMechanic {
 
     private Set<RideableMinecart> minecarts = new HashSet<>();
+
+    public TemporaryCart(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     public Set<RideableMinecart> getMinecarts() {
 

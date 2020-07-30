@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics.minecart;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
@@ -12,6 +13,10 @@ import com.sk89q.craftbook.util.EventUtil;
 import com.sk89q.util.yaml.YAMLProcessor;
 
 public class MobBlocker extends AbstractCraftBookMechanic {
+
+    public MobBlocker(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onVehicleEnter(VehicleEnterEvent event) {

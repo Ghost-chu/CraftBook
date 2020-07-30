@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.ChangedSign;
 import com.sk89q.craftbook.CraftBookPlayer;
@@ -28,6 +29,10 @@ import java.util.HashSet;
 import java.util.List;
 
 public class CookingPot extends AbstractCraftBookMechanic {
+
+    public CookingPot(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onSignChange(SignChangeEvent event) {

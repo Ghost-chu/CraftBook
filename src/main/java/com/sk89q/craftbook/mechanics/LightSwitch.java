@@ -16,6 +16,7 @@
 
 package com.sk89q.craftbook.mechanics;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.ChangedSign;
 import com.sk89q.craftbook.CraftBookPlayer;
@@ -44,6 +45,10 @@ import org.bukkit.event.block.SignChangeEvent;
  * @author fullwall
  */
 public class LightSwitch extends AbstractCraftBookMechanic {
+
+    public LightSwitch(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @Override
     public boolean enable() {

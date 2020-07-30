@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics.minecart;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.minecart.RideableMinecart;
 import org.bukkit.event.EventHandler;
@@ -11,6 +12,10 @@ import com.sk89q.craftbook.util.EventUtil;
 import com.sk89q.util.yaml.YAMLProcessor;
 
 public class CollisionEntry extends AbstractCraftBookMechanic {
+
+    public CollisionEntry(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @EventHandler(priority = EventPriority.LOW)
     public void onVehicleEntityCollision(VehicleEntityCollisionEvent event) {

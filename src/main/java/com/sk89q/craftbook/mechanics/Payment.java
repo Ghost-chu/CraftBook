@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -25,6 +26,10 @@ import com.sk89q.util.yaml.YAMLProcessor;
  * @author Me4502
  */
 public class Payment extends AbstractCraftBookMechanic {
+
+    public Payment(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @Override
     public boolean enable() {

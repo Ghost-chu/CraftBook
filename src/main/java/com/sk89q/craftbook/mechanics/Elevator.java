@@ -16,6 +16,7 @@
 
 package com.sk89q.craftbook.mechanics;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.ChangedSign;
 import com.sk89q.craftbook.CraftBookPlayer;
@@ -69,6 +70,10 @@ public class Elevator extends AbstractCraftBookMechanic {
 
     private HashSet<UUID> flyingPlayers;
     private HashMap<UUID, Entity> playerVehicles;
+
+    public Elevator(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @Override
     public boolean enable() {

@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics.boat;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.bukkit.CraftBookPlugin;
 import com.sk89q.craftbook.util.EntityUtil;
@@ -17,13 +18,19 @@ import org.bukkit.inventory.ItemStack;
 
 public class ExitRemover extends AbstractCraftBookMechanic {
 
+    public ExitRemover(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
+
     @EventHandler(priority = EventPriority.HIGH)
     public void onVehicleExit(VehicleExitEvent event) {
 
         if(!EventUtil.passesFilter(event)) return;
 
         if (!(event.getVehicle() instanceof Boat)) return;
-
+        if(!quotaManager.tickAndCheckNext(event.getVehicle().getLocation().getChunk(), true ,this.getClass())){
+            return;
+        }
         Bukkit.getScheduler().runTaskLater(CraftBookPlugin.inst(), new BoatRemover(event.getExited(), (Boat) event.getVehicle()), 2L);
     }
 

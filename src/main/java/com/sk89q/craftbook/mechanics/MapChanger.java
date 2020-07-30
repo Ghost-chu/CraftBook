@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.CraftBookPlayer;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -18,6 +19,10 @@ import com.sk89q.util.yaml.YAMLProcessor;
 import org.bukkit.inventory.meta.MapMeta;
 
 public class MapChanger extends AbstractCraftBookMechanic {
+
+    public MapChanger(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onSignChange(SignChangeEvent event) {

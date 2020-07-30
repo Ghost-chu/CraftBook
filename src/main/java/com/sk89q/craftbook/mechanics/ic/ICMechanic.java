@@ -16,6 +16,7 @@
 
 package com.sk89q.craftbook.mechanics.ic;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.ChangedSign;
 import com.sk89q.craftbook.CraftBookPlayer;
@@ -69,9 +70,10 @@ public class ICMechanic extends AbstractCraftBookMechanic {
     //protected final IC ic;
     //protected final BlockWorldVector pos;
 
-    public ICMechanic() {
+    public ICMechanic(QuotaManager quotaManager) {
+        super(quotaManager);
 
-        manager = new ICManager();
+        manager = new    ICManager();
         instance = this;
     }
 

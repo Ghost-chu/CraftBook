@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics.minecart;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import org.bukkit.entity.Minecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -12,6 +13,10 @@ import com.sk89q.craftbook.util.EventUtil;
 import com.sk89q.util.yaml.YAMLProcessor;
 
 public class FallModifier extends AbstractCraftBookMechanic {
+
+    public FallModifier(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @Override
     public void disable() {

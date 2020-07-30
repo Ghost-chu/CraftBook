@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics.minecart.blocks;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.ChangedSign;
 import com.sk89q.craftbook.CraftBookPlayer;
 import com.sk89q.craftbook.bukkit.util.CraftBookBukkitUtil;
@@ -14,6 +15,10 @@ import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 
 public class CartTeleporter extends CartBlockMechanism {
+
+    public CartTeleporter(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @EventHandler
     public void onVehicleImpact(CartBlockImpactEvent event) {

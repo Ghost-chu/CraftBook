@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.bukkit.CraftBookPlugin;
 import com.sk89q.craftbook.util.BlockSyntax;
@@ -26,6 +27,10 @@ import java.util.logging.Level;
 public class Footprints extends AbstractCraftBookMechanic {
 
     private Set<String> footsteps;
+
+    public Footprints(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerMove(final PlayerMoveEvent event) {

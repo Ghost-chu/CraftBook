@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.bukkit.CraftBookPlugin;
 import com.sk89q.craftbook.util.BlockUtil;
@@ -25,6 +26,10 @@ import java.util.Set;
 public class BetterPlants extends AbstractCraftBookMechanic {
 
     private BukkitTask growthTask;
+
+    public BetterPlants(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @Override
     public boolean enable() {

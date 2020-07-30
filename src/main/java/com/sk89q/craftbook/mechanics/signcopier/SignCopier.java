@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics.signcopier;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.CraftBookPlayer;
 import com.sk89q.craftbook.bukkit.CraftBookPlugin;
@@ -26,6 +27,10 @@ import java.util.Map;
 public class SignCopier extends AbstractCraftBookMechanic {
 
     public static Map<String, String[]> signs;
+
+    public SignCopier(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @Override
     public boolean enable() {

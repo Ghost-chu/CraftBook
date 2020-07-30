@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics.boat;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.util.EventUtil;
 import com.sk89q.craftbook.util.ItemUtil;
@@ -12,12 +13,20 @@ import org.bukkit.inventory.ItemStack;
 
 public class Drops extends AbstractCraftBookMechanic {
 
+    public Drops(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
+
     @EventHandler(priority = EventPriority.HIGH)
     public void onVehicleDestroy(VehicleDestroyEvent event) {
 
         if(!EventUtil.passesFilter(event)) return;
 
         if (!(event.getVehicle() instanceof Boat)) return;
+
+        if(!quotaManager.tickAndCheckNext(event.getVehicle().getLocation().getChunk(), true ,this.getClass())){
+            return;
+        }
 
         if (event.getAttacker() == null) {
             Boat boat = (Boat) event.getVehicle();

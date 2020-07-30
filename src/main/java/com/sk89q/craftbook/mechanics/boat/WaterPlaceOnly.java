@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics.boat;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.util.yaml.YAMLProcessor;
 import org.bukkit.ChatColor;
@@ -13,6 +14,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class WaterPlaceOnly extends AbstractCraftBookMechanic {
 
+    public WaterPlaceOnly(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
+
     @EventHandler
     public void playerInteractEvent(PlayerInteractEvent event) {
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
@@ -20,6 +25,9 @@ public class WaterPlaceOnly extends AbstractCraftBookMechanic {
                     && Tag.ITEMS_BOATS.isTagged(event.getItem().getType())) {
                 Block above = event.getClickedBlock().getRelative(0,1,0);
                 if ((!isWater(above) || event.getClickedBlock().getY() == event.getClickedBlock().getWorld().getMaxHeight() - 1) && !isWater(event.getClickedBlock())) {
+                    if(!quotaManager.tickAndCheckNext(event.getPlayer().getLocation().getChunk(), true ,this.getClass())){
+                        return;
+                    }
                     event.setCancelled(true);
                     event.setUseItemInHand(Result.DENY);
                     event.getPlayer().sendMessage(ChatColor.RED + "You can't place that boat on land!");

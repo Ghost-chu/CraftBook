@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.CraftBookPlayer;
 import com.sk89q.craftbook.bukkit.CraftBookPlugin;
@@ -30,6 +31,10 @@ public class PaintingSwitch extends AbstractCraftBookMechanic {
 
     private Map<Painting, UUID> paintings = new HashMap<>();
     private Map<UUID, Painting> players = new HashMap<>();
+
+    public PaintingSwitch(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     public boolean isBeingEdited(Painting paint) {
 

@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics.minecart.blocks;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.ChangedSign;
 import com.sk89q.craftbook.CraftBookPlayer;
@@ -32,6 +33,10 @@ import java.util.Locale;
 public abstract class CartBlockMechanism extends AbstractCraftBookMechanic {
 
     protected BlockStateHolder material;
+
+    public CartBlockMechanism(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     public BlockStateHolder getMaterial() {
         return material;

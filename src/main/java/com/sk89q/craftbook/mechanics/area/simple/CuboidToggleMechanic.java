@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics.area.simple;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.ChangedSign;
 import com.sk89q.craftbook.CraftBookPlayer;
@@ -33,6 +34,10 @@ import java.util.Objects;
  * A class that can be a mechanic that toggles a cuboid. This is basically either Door or Bridge.
  */
 public abstract class CuboidToggleMechanic extends AbstractCraftBookMechanic {
+
+    public CuboidToggleMechanic(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     public abstract Block getFarSign(Block trigger);
 

@@ -1,6 +1,7 @@
 package com.sk89q.craftbook.mechanics.crafting;
 
 import com.google.common.base.*;
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.CraftBookPlayer;
 import com.sk89q.craftbook.bukkit.CraftBookPlugin;
@@ -38,6 +39,10 @@ public class CustomCrafting extends AbstractCraftBookMechanic {
     public static final Set<String> registeredNames = new HashSet<>();
 
     private static final Map<Recipe, RecipeManager.Recipe> advancedRecipes = new HashMap<>();
+
+    public CustomCrafting(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @Override
     public boolean enable() {
@@ -122,7 +127,6 @@ public class CustomCrafting extends AbstractCraftBookMechanic {
     @EventHandler(priority = EventPriority.LOW)
     public void prepareCraft(PrepareItemCraftEvent event) {
         if(!EventUtil.passesFilter(event)) return;
-
         ItemStack bits = null;
         Player p = null;
         CraftBookPlayer lp = null;

@@ -2,6 +2,7 @@ package com.sk89q.craftbook.mechanics.drops.legacy;
 
 import java.io.File;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import org.bukkit.Bukkit;
 
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
@@ -12,6 +13,10 @@ import com.sk89q.util.yaml.YAMLProcessor;
 public class LegacyCustomDrops extends AbstractCraftBookMechanic {
 
     public LegacyCustomDropManager customDrops;
+
+    public LegacyCustomDrops(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     /*@EventHandler(priority = EventPriority.HIGH)
     public void handleCustomBlockDrops(BlockBreakEvent event) {

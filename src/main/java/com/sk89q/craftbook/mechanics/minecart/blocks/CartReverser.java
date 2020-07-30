@@ -1,6 +1,7 @@
 package com.sk89q.craftbook.mechanics.minecart.blocks;
 import static com.sk89q.craftbook.util.CartUtil.reverse;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.mechanics.minecart.events.CartBlockImpactEvent;
 import com.sk89q.craftbook.util.BlockSyntax;
 import com.sk89q.craftbook.util.RedstoneUtil.Power;
@@ -12,6 +13,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.util.Vector;
 
 public class CartReverser extends CartBlockMechanism {
+
+    public CartReverser(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @EventHandler
     public void onVehicleImpact(CartBlockImpactEvent event) {

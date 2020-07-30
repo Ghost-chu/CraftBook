@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics.area;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.ChangedSign;
 import com.sk89q.craftbook.CraftBookPlayer;
@@ -39,6 +40,10 @@ import java.util.regex.Pattern;
 public class Area extends AbstractCraftBookMechanic {
 
     protected static Area instance;
+
+    public Area(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @Override
     public boolean enable() {
@@ -201,7 +206,6 @@ public class Area extends AbstractCraftBookMechanic {
     }
 
     private static boolean toggle(ChangedSign sign, boolean save) {
-
         if (!checkSign(sign)) return false;
 
         try {

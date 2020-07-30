@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -18,6 +19,10 @@ import com.sk89q.util.yaml.YAMLProcessor;
 public class BetterPhysics extends AbstractCraftBookMechanic {
 
     protected static BetterPhysics instance;
+
+    public BetterPhysics(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @Override
     public boolean enable() {

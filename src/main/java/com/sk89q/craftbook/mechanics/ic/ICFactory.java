@@ -16,6 +16,7 @@
 
 package com.sk89q.craftbook.mechanics.ic;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.ChangedSign;
 import com.sk89q.craftbook.CraftBookPlayer;
 

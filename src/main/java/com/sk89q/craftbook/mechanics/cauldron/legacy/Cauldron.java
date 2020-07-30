@@ -16,6 +16,7 @@ package com.sk89q.craftbook.mechanics.cauldron.legacy;
  * see <http://www.gnu.org/licenses/>.
  */
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.CraftBookPlayer;
 import com.sk89q.craftbook.bukkit.BukkitCraftBookPlayer;
@@ -53,6 +54,10 @@ import java.util.Map.Entry;
  */
 @Deprecated
 public class Cauldron extends AbstractCraftBookMechanic {
+
+    public Cauldron(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     public boolean isACauldron(Block block) {
 
@@ -92,7 +97,9 @@ public class Cauldron extends AbstractCraftBookMechanic {
 
         if(event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getHand() != EquipmentSlot.HAND) return;
         if(!isACauldron(event.getClickedBlock())) return;
-
+        if(!quotaManager.tickAndCheckNext(event.getPlayer().getLocation().getChunk(), true ,this.getClass())){
+            return;
+        }
         CraftBookPlayer localPlayer = CraftBookPlugin.inst().wrapPlayer(event.getPlayer());
 
         if (!localPlayer.hasPermission("craftbook.mech.cauldron")) {

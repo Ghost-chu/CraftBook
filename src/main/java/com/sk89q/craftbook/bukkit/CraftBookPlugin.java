@@ -1,6 +1,7 @@
 package com.sk89q.craftbook.bukkit;
 
 import com.google.common.collect.Sets;
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.bukkit.util.CommandsManagerRegistration;
 import com.sk89q.craftbook.CraftBookMechanic;
 import com.sk89q.craftbook.CraftBookPlayer;
@@ -220,6 +221,11 @@ public class CraftBookPlugin extends JavaPlugin {
     public static final Map<String, Class<? extends CraftBookMechanic>> availableMechanics;
 
     public boolean useLegacyCartSystem = false;
+
+    /**
+     * CraftBook-Quota only feature - Quota Controller
+     */
+    private QuotaManager quotaManager;
 
     static {
         availableMechanics = new TreeMap<>();

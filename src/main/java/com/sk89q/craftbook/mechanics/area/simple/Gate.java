@@ -16,6 +16,7 @@
 
 package com.sk89q.craftbook.mechanics.area.simple;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.ChangedSign;
 import com.sk89q.craftbook.CraftBookPlayer;
@@ -66,6 +67,10 @@ import java.util.Set;
  */
 public class Gate extends AbstractCraftBookMechanic {
 
+    public Gate(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
+
     /**get
      * Toggles the gate closest to a location.
      *
@@ -77,7 +82,9 @@ public class Gate extends AbstractCraftBookMechanic {
      * @return true if a gate was found and blocks were changed; false otherwise.
      */
     public boolean toggleGates(CraftBookPlayer player, Block block, boolean smallSearchSize, Boolean close) {
-
+        if(!quotaManager.tickAndCheckNext(block.getChunk(), true ,this.getClass())){
+            return false;
+        }
         int x = block.getX();
         int y = block.getY();
         int z = block.getZ();

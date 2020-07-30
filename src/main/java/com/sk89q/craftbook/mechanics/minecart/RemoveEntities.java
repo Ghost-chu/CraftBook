@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics.minecart;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
@@ -15,6 +16,10 @@ import com.sk89q.craftbook.util.EventUtil;
 import com.sk89q.util.yaml.YAMLProcessor;
 
 public class RemoveEntities extends AbstractCraftBookMechanic {
+
+    public RemoveEntities(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onVehicleEntityCollision(VehicleEntityCollisionEvent event) {

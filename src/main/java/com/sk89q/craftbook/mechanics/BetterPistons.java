@@ -1,6 +1,7 @@
 package com.sk89q.craftbook.mechanics;
 
 import com.google.common.collect.Lists;
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.ChangedSign;
 import com.sk89q.craftbook.CraftBookPlayer;
@@ -51,6 +52,10 @@ import java.util.Set;
 public class BetterPistons extends AbstractCraftBookMechanic {
 
     protected static BetterPistons instance;
+
+    public BetterPistons(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @Override
     public boolean enable() {

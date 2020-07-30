@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.bukkit.CraftBookPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -18,6 +19,10 @@ import com.sk89q.craftbook.util.events.SourcedBlockRedstoneEvent;
 import com.sk89q.util.yaml.YAMLProcessor;
 
 public class Sponge extends AbstractCraftBookMechanic {
+
+    public Sponge(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     private boolean isValidSponge(Block block) {
         return block.getType() == Material.SPONGE || (includeWet && block.getType() == Material.WET_SPONGE);

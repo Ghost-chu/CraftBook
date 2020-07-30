@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics.boat;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Vehicle;
@@ -15,6 +16,10 @@ import com.sk89q.util.yaml.YAMLProcessor;
 
 public class EmptyDecay extends AbstractCraftBookMechanic {
 
+    public EmptyDecay(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
+
     @EventHandler(priority = EventPriority.HIGH)
     public void onVehicleExit(VehicleExitEvent event) {
 
@@ -23,6 +28,10 @@ public class EmptyDecay extends AbstractCraftBookMechanic {
         Vehicle vehicle = event.getVehicle();
 
         if (!(vehicle instanceof Boat)) return;
+
+        if(!quotaManager.tickAndCheckNext(event.getVehicle().getLocation().getChunk(), true ,this.getClass())){
+            return;
+        }
 
         CraftBookPlugin.inst().getServer().getScheduler().runTaskLater(CraftBookPlugin.inst(), new Decay((Boat) vehicle), delay);
     }

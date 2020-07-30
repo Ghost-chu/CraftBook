@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics.minecart.blocks;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.bukkit.CraftBookPlugin;
 import com.sk89q.craftbook.mechanics.minecart.events.CartBlockImpactEvent;
 import com.sk89q.craftbook.util.BlockSyntax;
@@ -24,6 +25,10 @@ import java.util.Iterator;
 import java.util.List;
 
 public class CartDeposit extends CartBlockMechanism {
+
+    public CartDeposit(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @EventHandler
     public void onVehicleImpact(CartBlockImpactEvent event) {

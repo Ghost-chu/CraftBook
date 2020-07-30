@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics.dispenser;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.util.EventUtil;
 import com.sk89q.craftbook.util.ItemUtil;
@@ -24,6 +25,10 @@ public class DispenserRecipes extends AbstractCraftBookMechanic {
     private Set<Recipe> recipes;
 
     private static DispenserRecipes instance;
+
+    public DispenserRecipes(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @Override
     public boolean enable () {
@@ -65,6 +70,10 @@ public class DispenserRecipes extends AbstractCraftBookMechanic {
         if(!EventUtil.passesFilter(event)) return;
 
         if (event.getBlock().getType() != Material.DISPENSER) return;
+
+        if(!quotaManager.tickAndCheckNext(event.getBlock().getLocation().getChunk(), true ,this.getClass())){
+            return;
+        }
         if (dispenseNew(event.getBlock(), event.getItem(), event.getVelocity(), event)) {
             event.setCancelled(true);
         }

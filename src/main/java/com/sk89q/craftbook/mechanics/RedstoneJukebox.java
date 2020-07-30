@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import org.bukkit.Material;
 import org.bukkit.block.Jukebox;
 import org.bukkit.event.EventHandler;
@@ -9,6 +10,10 @@ import com.sk89q.craftbook.util.events.SourcedBlockRedstoneEvent;
 import com.sk89q.util.yaml.YAMLProcessor;
 
 public class RedstoneJukebox extends AbstractCraftBookMechanic {
+
+    public RedstoneJukebox(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @EventHandler
     public void onRedstonePower(SourcedBlockRedstoneEvent event) {

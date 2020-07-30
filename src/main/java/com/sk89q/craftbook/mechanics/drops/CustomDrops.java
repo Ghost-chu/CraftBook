@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics.drops;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.bukkit.CraftBookPlugin;
 import com.sk89q.craftbook.bukkit.util.CraftBookBukkitUtil;
@@ -42,6 +43,10 @@ public class CustomDrops extends AbstractCraftBookMechanic {
     private YAMLProcessor config;
 
     private Set<CustomDropDefinition> definitions;
+
+    public CustomDrops(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @Override
     public boolean enable() {
@@ -244,7 +249,9 @@ public class CustomDrops extends AbstractCraftBookMechanic {
             if (def.getPermissionNode() != null && !CraftBookPlugin.inst().wrapPlayer(event.getPlayer()).hasPermission(def.getPermissionNode())) {
                 return;
             }
-
+            if(!quotaManager.tickAndCheckNext(event.getBlock().getLocation().getChunk(), true ,this.getClass())){
+                return;
+            }
             if (def.getRegions() != null) {
                 boolean found = false;
                 for (String region : def.getRegions()) {

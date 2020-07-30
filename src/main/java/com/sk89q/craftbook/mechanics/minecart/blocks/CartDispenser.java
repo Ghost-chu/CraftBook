@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics.minecart.blocks;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.bukkit.util.CraftBookBukkitUtil;
 import com.sk89q.craftbook.mechanics.minecart.events.CartBlockImpactEvent;
 import com.sk89q.craftbook.mechanics.minecart.events.CartBlockRedstoneEvent;
@@ -54,6 +55,10 @@ import java.util.Locale;
  * @author hash
  */
 public class CartDispenser extends CartBlockMechanism {
+
+    public CartDispenser(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @EventHandler
     public void onCartImpact(CartBlockImpactEvent event) {

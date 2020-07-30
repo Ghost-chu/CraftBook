@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics.minecart;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
@@ -19,6 +20,10 @@ import com.sk89q.util.yaml.YAMLProcessor;
 public class MoreRails extends AbstractCraftBookMechanic {
 
     public static MoreRails instance;
+
+    public MoreRails(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @Override
     public boolean enable() {

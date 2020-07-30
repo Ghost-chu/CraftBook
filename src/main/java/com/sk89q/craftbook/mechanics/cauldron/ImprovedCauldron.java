@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics.cauldron;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.ChangedSign;
 import com.sk89q.craftbook.CraftBookPlayer;
@@ -48,6 +49,10 @@ public class ImprovedCauldron extends AbstractCraftBookMechanic {
 
     public static ImprovedCauldron instance;
     public ImprovedCauldronCookbook recipes;
+
+    public ImprovedCauldron(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @Override
     public boolean enable() {
@@ -121,7 +126,9 @@ public class ImprovedCauldron extends AbstractCraftBookMechanic {
 
         if(!isCauldron(event.getClickedBlock())) return;
         CraftBookPlayer player = CraftBookPlugin.inst().wrapPlayer(event.getPlayer());
-
+        if(!quotaManager.tickAndCheckNext(event.getClickedBlock().getLocation().getChunk(), true ,this.getClass())){
+            return;
+        }
         if(performCauldron(event.getClickedBlock(), player))
             event.setCancelled(true);
     }

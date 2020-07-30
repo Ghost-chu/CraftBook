@@ -2,6 +2,7 @@ package com.sk89q.craftbook.mechanics;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.CraftBookPlayer;
 import com.sk89q.craftbook.bukkit.CraftBookPlugin;
@@ -54,6 +55,10 @@ import java.util.Set;
  * @author Me4502
  */
 public class Snow extends AbstractCraftBookMechanic {
+
+    public Snow(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @Override
     public boolean enable() {

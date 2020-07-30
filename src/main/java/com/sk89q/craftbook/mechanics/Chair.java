@@ -6,6 +6,7 @@ import com.comphenix.protocol.events.ListenerOptions;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.CraftBookPlayer;
 import com.sk89q.craftbook.bukkit.CraftBookPlugin;
@@ -55,6 +56,10 @@ import java.util.stream.Collectors;
 public class Chair extends AbstractCraftBookMechanic {
 
     private Map<String, ChairData> chairs;
+
+    public Chair(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     private static Entity fixArrow(Block block, Entity chairEntity) {
         if(chairEntity == null || !chairEntity.isValid() || chairEntity.isDead()) {

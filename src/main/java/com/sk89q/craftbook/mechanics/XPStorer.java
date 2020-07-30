@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.ChangedSign;
 import com.sk89q.craftbook.CraftBookPlayer;
@@ -40,6 +41,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class XPStorer extends AbstractCraftBookMechanic {
+
+    public XPStorer(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @EventHandler
     public void onRightClick(PlayerInteractEvent event) {

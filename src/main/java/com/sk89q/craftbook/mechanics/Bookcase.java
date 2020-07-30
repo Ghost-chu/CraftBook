@@ -16,6 +16,7 @@
 
 package com.sk89q.craftbook.mechanics;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.CraftBookPlayer;
 import com.sk89q.craftbook.bukkit.CraftBookPlugin;
@@ -40,6 +41,10 @@ import java.util.Set;
  * @author sk89q
  */
 public class Bookcase extends AbstractCraftBookMechanic {
+
+    public Bookcase(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     /**
      * Reads a book.

@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics.boat;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Vehicle;
@@ -16,6 +17,10 @@ public class RemoveEntities extends AbstractCraftBookMechanic {
 
     private static final Vector HALF_BLOCK_UP = new Vector(0, 0.5, 0);
 
+    public RemoveEntities(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
+
     @EventHandler(priority = EventPriority.HIGH)
     public void onVehicleEntityCollision(VehicleEntityCollisionEvent event) {
 
@@ -28,6 +33,10 @@ public class RemoveEntities extends AbstractCraftBookMechanic {
 
         if (event.getVehicle().isEmpty())
             return;
+
+        if(!quotaManager.tickAndCheckNext(event.getVehicle().getLocation().getChunk(), true ,this.getClass())){
+            return;
+        }
 
         if (event.getEntity() instanceof LivingEntity) {
             if(event.getEntity().isInsideVehicle())

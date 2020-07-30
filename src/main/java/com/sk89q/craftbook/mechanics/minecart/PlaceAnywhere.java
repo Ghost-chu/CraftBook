@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics.minecart;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,6 +18,10 @@ import com.sk89q.craftbook.util.RailUtil;
 import com.sk89q.util.yaml.YAMLProcessor;
 
 public class PlaceAnywhere extends AbstractCraftBookMechanic {
+
+    public PlaceAnywhere(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerClick(PlayerInteractEvent event) {

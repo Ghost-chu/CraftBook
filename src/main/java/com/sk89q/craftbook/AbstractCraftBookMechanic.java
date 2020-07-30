@@ -1,9 +1,14 @@
 package com.sk89q.craftbook;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.util.LoadPriority;
+import com.sun.org.apache.xpath.internal.operations.Quo;
 
 public abstract class AbstractCraftBookMechanic implements CraftBookMechanic, Comparable<LoadPriority> {
-
+    public QuotaManager quotaManager;
+    public AbstractCraftBookMechanic(QuotaManager quotaManager){
+        this.quotaManager = quotaManager;
+    }
     @Override
     public boolean enable() {
         return true;

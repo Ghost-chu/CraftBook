@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics.minecart.blocks;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.ChangedSign;
 import com.sk89q.craftbook.CraftBookPlayer;
 import com.sk89q.craftbook.mechanics.minecart.events.CartBlockImpactEvent;
@@ -11,6 +12,10 @@ import org.bukkit.entity.Minecart;
 import org.bukkit.event.EventHandler;
 
 public class CartMaxSpeed extends CartBlockMechanism {
+
+    public CartMaxSpeed(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @EventHandler
     public void onVehicleImpact(CartBlockImpactEvent event) {

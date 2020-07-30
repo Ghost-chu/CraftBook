@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.CraftBookPlayer;
 import com.sk89q.craftbook.bukkit.util.CraftBookBukkitUtil;
 import org.bukkit.Bukkit;
@@ -30,6 +31,10 @@ import com.sk89q.craftbook.util.SignUtil;
 import com.sk89q.util.yaml.YAMLProcessor;
 
 public class HiddenSwitch extends AbstractCraftBookMechanic {
+
+    public HiddenSwitch(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     private static boolean isValidWallSign(Block b) {
 

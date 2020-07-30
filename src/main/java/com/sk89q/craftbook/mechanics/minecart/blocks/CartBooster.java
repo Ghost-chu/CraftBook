@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics.minecart.blocks;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.mechanics.minecart.events.CartBlockImpactEvent;
 import com.sk89q.craftbook.util.BlockSyntax;
 import com.sk89q.craftbook.util.RedstoneUtil.Power;
@@ -10,6 +11,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.util.Vector;
 
 public class CartBooster extends CartBlockMechanism {
+
+    public CartBooster(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @EventHandler
     public void onVehicleImpact(CartBlockImpactEvent event) {

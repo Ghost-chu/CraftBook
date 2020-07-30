@@ -16,6 +16,7 @@ package com.sk89q.craftbook.mechanics.area.simple;
  * see <http://www.gnu.org/licenses/>.
  */
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.ChangedSign;
 import com.sk89q.craftbook.CraftBookPlayer;
 import com.sk89q.craftbook.bukkit.CraftBookPlugin;
@@ -60,6 +61,10 @@ import java.util.stream.Collectors;
  * @author turtle9598
  */
 public class Door extends CuboidToggleMechanic {
+
+    public Door(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onSignChange(SignChangeEvent event) {
@@ -179,7 +184,9 @@ public class Door extends CuboidToggleMechanic {
     }
 
     public boolean flipState(Block trigger, CraftBookPlayer player) throws InvalidMechanismException {
-
+        if(!quotaManager.tickAndCheckNext(trigger.getChunk(), true ,this.getClass())){
+            return false;
+        }
         if (!SignUtil.isCardinal(trigger)) throw new InvalidMechanismException();
 
         ChangedSign sign = CraftBookBukkitUtil.toChangedSign(trigger);

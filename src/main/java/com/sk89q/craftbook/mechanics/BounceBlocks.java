@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.ChangedSign;
 import com.sk89q.craftbook.CraftBookPlayer;
@@ -34,6 +35,10 @@ public class BounceBlocks extends AbstractCraftBookMechanic {
     private List<BaseBlock> blocks;
     private double sensitivity;
     private Map<BaseBlock, Vector> autoBouncers = new HashMap<>();
+
+    public BounceBlocks(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @Override
     public void loadConfiguration (YAMLProcessor config, String path) {

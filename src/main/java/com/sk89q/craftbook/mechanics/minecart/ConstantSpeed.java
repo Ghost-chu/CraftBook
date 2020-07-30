@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics.minecart;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Minecart;
 import org.bukkit.event.EventHandler;
@@ -13,6 +14,10 @@ import com.sk89q.craftbook.util.RailUtil;
 import com.sk89q.util.yaml.YAMLProcessor;
 
 public class ConstantSpeed extends AbstractCraftBookMechanic {
+
+    public ConstantSpeed(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onVehicleMove(VehicleMoveEvent event) {

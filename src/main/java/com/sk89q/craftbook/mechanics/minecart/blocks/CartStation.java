@@ -2,6 +2,7 @@ package com.sk89q.craftbook.mechanics.minecart.blocks;
 
 import static com.sk89q.craftbook.util.CartUtil.stop;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.bukkit.CraftBookPlugin;
 import com.sk89q.craftbook.mechanics.minecart.events.CartBlockEnterEvent;
 import com.sk89q.craftbook.mechanics.minecart.events.CartBlockImpactEvent;
@@ -22,6 +23,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 public class CartStation extends CartBlockMechanism {
+
+    public CartStation(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @Override
     public boolean enable() {

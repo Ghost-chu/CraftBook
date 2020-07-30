@@ -1,5 +1,6 @@
 package com.sk89q.craftbook.mechanics.variables;
 
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.ChangedSign;
 import com.sk89q.craftbook.bukkit.CraftBookPlugin;
@@ -33,6 +34,10 @@ public class VariableManager extends AbstractCraftBookMechanic {
      * Stores the variables used in VariableStore ((Variable, Namespace), Value).
      */
     private HashMap<Tuple2<String, String>, String> variableStore;
+
+    public VariableManager(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
 
     @Override
     public boolean enable() {

@@ -1,6 +1,7 @@
 package com.sk89q.craftbook.mechanics.headdrops;
 
 import com.google.common.collect.Lists;
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.CraftBookPlayer;
 import com.sk89q.craftbook.bukkit.CraftBookPlugin;
@@ -36,6 +37,10 @@ public class HeadDrops extends AbstractCraftBookMechanic {
 
     protected static HeadDrops instance;
 
+    public HeadDrops(QuotaManager quotaManager) {
+        super(quotaManager);
+    }
+
     @Override
     public boolean enable() {
 
@@ -61,7 +66,9 @@ public class HeadDrops extends AbstractCraftBookMechanic {
             return; //Invalid type.
         else
             typeName = typeName.toUpperCase();
-
+        if(!quotaManager.tickAndCheckNext(event.getEntity().getLocation().getChunk(), true ,this.getClass())){
+            return;
+        }
         double chance = Math.min(1, dropRate);
         if(customDropRates.containsKey(typeName))
             chance = Math.min(1, customDropRates.get(typeName));
