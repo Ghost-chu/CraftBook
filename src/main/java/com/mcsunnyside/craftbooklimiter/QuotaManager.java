@@ -1,10 +1,13 @@
 package com.mcsunnyside.craftbooklimiter;
 
-import com.google.common.cache.*;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import org.bukkit.Chunk;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class QuotaManager {
@@ -12,6 +15,7 @@ public class QuotaManager {
     private final int limitPerChunk;
     private final boolean worksOnly;
     private final List<Class<? extends AbstractCraftBookMechanic>> ignores;
+    private final Map<Class<? extends AbstractCraftBookMechanic>, Count> map = new HashMap<>();
     public QuotaManager(int maxSize, int expireAfterWriteSec, int limitPerChunk, boolean worksOnly, List<Class<? extends AbstractCraftBookMechanic>> ignores){
         this.ignores = ignores;
         this.worksOnly = worksOnly;
@@ -23,6 +27,10 @@ public class QuotaManager {
                 .maximumSize(maxSize)
                 .expireAfterWrite(expireAfterWriteSec, TimeUnit.SECONDS)
                 .build();
+    }
+
+    public Map<Class<? extends AbstractCraftBookMechanic>, Count> getStatsMap() {
+        return map;
     }
 
     public Cache<Chunk, Count> getCaching() {
@@ -58,6 +66,7 @@ public class QuotaManager {
         if(!worksOnly && works){
             return; //Prevent count twice
         }
+        map.getOrDefault(clazz, new Count()).grow();
         Count count = caching.getIfPresent(chunk);
         if(count == null) {
             count = new Count();
@@ -71,38 +80,9 @@ public class QuotaManager {
      * @param works Does machine already effect the world?
      * @return This time tick is allowed
      */
-    public boolean tickAndCheckNext(Chunk chunk, boolean works, Class<? extends AbstractCraftBookMechanic> clazz){
-        if(ignores.contains(clazz)){
-            return true;
-        }
-        if(worksOnly && !works){
-            return true;
-        }
-        if(!worksOnly && works){
-            return true; //Prevent count twice
-        }
-        Count count = caching.getIfPresent(chunk);
-        if(count == null) {
-            count = new Count();
-            caching.put(chunk, count);
-        }
-        boolean result = count.reach(this.limitPerChunk);
-        count.grow();
-        return !result;
+    public boolean tickAndCheckNext(Chunk chunk, boolean works, Class<? extends AbstractCraftBookMechanic> clazz) {
+        machineTick(chunk, works, clazz);
+        return machineTickable(chunk, works, clazz);
     }
-}
-class Count{
-    int count = 0;
-    public int grow(){
-        return count++;
-    }
-    public int decay(){
-        return count--;
-    }
-    public int get(){
-        return count;
-    }
-    public boolean reach(int limit){
-        return count >= limit;
-    }
+
 }

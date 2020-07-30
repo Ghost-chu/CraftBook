@@ -1,37 +1,49 @@
 package com.sk89q.craftbook.bukkit.commands;
-import java.io.File;
-import java.io.IOException;
 
-import com.sk89q.craftbook.mechanics.headdrops.HeadDropsCommands;
-import com.sk89q.craftbook.util.ItemSyntax;
-import com.sk89q.minecraft.util.commands.CommandException;
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-
+import com.mcsunnyside.craftbooklimiter.Count;
+import com.mcsunnyside.craftbooklimiter.QuotaManager;
+import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.bukkit.CraftBookPlugin;
 import com.sk89q.craftbook.bukkit.ReportWriter;
 import com.sk89q.craftbook.bukkit.util.CraftBookBukkitUtil;
 import com.sk89q.craftbook.mechanics.area.AreaCommands;
 import com.sk89q.craftbook.mechanics.cauldron.CauldronCommands;
 import com.sk89q.craftbook.mechanics.crafting.RecipeCommands;
+import com.sk89q.craftbook.mechanics.headdrops.HeadDropsCommands;
 import com.sk89q.craftbook.mechanics.ic.ICCommands;
 import com.sk89q.craftbook.mechanics.items.CommandItemCommands;
 import com.sk89q.craftbook.mechanics.signcopier.SignEditCommands;
 import com.sk89q.craftbook.mechanics.variables.VariableCommands;
+import com.sk89q.craftbook.util.ItemSyntax;
 import com.sk89q.craftbook.util.PastebinPoster;
 import com.sk89q.craftbook.util.PastebinPoster.PasteCallback;
 import com.sk89q.craftbook.util.developer.ExternalUtilityManager;
-import com.sk89q.minecraft.util.commands.Command;
-import com.sk89q.minecraft.util.commands.CommandContext;
-import com.sk89q.minecraft.util.commands.CommandPermissions;
-import com.sk89q.minecraft.util.commands.CommandPermissionsException;
-import com.sk89q.minecraft.util.commands.NestedCommand;
+import com.sk89q.minecraft.util.commands.*;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
+
 public class TopLevelCommands {
+    private final CraftBookPlugin plugin;
 
     public TopLevelCommands(CraftBookPlugin plugin) {
+        this.plugin = plugin;
+    }
 
+    @Command(aliases = {"quota"}, desc = "CraftBook-Quota Limits details")
+    public void quota(CommandContext context, CommandSender sender) {
+        QuotaManager manager = plugin.getQuotaManager();
+        sender.sendMessage("CraftBook-Quota - Details");
+        sender.sendMessage("AverageLoadPenalty: " + manager.getCaching().stats().averageLoadPenalty() + "ns");
+        sender.sendMessage("HitRate: " + manager.getCaching().stats().hitRate());
+        sender.sendMessage("EvictionCount: " + manager.getCaching().stats().evictionCount());
+        for (Map.Entry<Class<? extends AbstractCraftBookMechanic>, Count> mech : manager.getStatsMap().entrySet()) {
+            sender.sendMessage(" - " + mech.getKey().getCanonicalName() + " = " + mech.getValue().get());
+        }
     }
 
     @Command(aliases = {"craftbook", "cb"}, desc = "CraftBook Plugin commands")
@@ -107,7 +119,7 @@ public class TopLevelCommands {
         public void about(CommandContext context, CommandSender sender) {
 
             String ver = CraftBookPlugin.inst().getDescription().getVersion();
-            if(CraftBookPlugin.getVersion() != null) {
+            if (CraftBookPlugin.getVersion() != null) {
                 ver = CraftBookPlugin.getVersion();
             }
             sender.sendMessage(ChatColor.YELLOW + "CraftBook version " + ver);
@@ -117,7 +129,7 @@ public class TopLevelCommands {
         @Command(aliases = {"iteminfo", "itemsyntax"}, desc = "Provides item syntax for held item.")
         public void itemInfo(CommandContext context, CommandSender sender) throws CommandException {
 
-            if(!(sender instanceof Player)) {
+            if (!(sender instanceof Player)) {
                 throw new CommandException("Only players can use this command!");
             }
             if (((Player) sender).getInventory().getItemInMainHand() != null) {
@@ -130,7 +142,7 @@ public class TopLevelCommands {
 
         @Command(aliases = {"cbid", "craftbookid"}, desc = "Gets the players CBID.")
         public void cbid(CommandContext context, CommandSender sender) throws CommandException {
-            if(!(sender instanceof Player)) {
+            if (!(sender instanceof Player)) {
                 throw new CommandException("Only players can use this command!");
             }
             sender.sendMessage("CraftBook ID: " + CraftBookPlugin.inst().wrapPlayer((Player) sender).getCraftBookId());
@@ -143,7 +155,7 @@ public class TopLevelCommands {
             File dest = new File(CraftBookPlugin.inst().getDataFolder(), "report.txt");
             ReportWriter report = new ReportWriter(CraftBookPlugin.inst());
 
-            if(args.hasFlag('i'))
+            if (args.hasFlag('i'))
                 report.appendFlags("i");
 
             report.generate();
@@ -181,7 +193,7 @@ public class TopLevelCommands {
         @CommandPermissions({"craftbook.developer"})
         public void dev(CommandContext args, final CommandSender sender) throws CommandPermissionsException {
 
-            if(args.argsLength() > 1 && args.getString(0).equalsIgnoreCase("util")) {
+            if (args.argsLength() > 1 && args.getString(0).equalsIgnoreCase("util")) {
                 try {
                     ExternalUtilityManager.performExternalUtility(args.getString(1), args.getSlice(1));
                     sender.sendMessage(ChatColor.YELLOW + "Performed utility successfully!");
@@ -196,8 +208,8 @@ public class TopLevelCommands {
         @CommandPermissions({"craftbook.enable-mechanic"})
         public void enable(CommandContext args, final CommandSender sender) throws CommandPermissionsException {
 
-            if(args.argsLength() > 0) {
-                if(CraftBookPlugin.inst().enableMechanic(args.getString(0)))
+            if (args.argsLength() > 0) {
+                if (CraftBookPlugin.inst().enableMechanic(args.getString(0)))
                     sender.sendMessage(ChatColor.YELLOW + "Sucessfully enabled " + args.getString(0));
                 else
                     sender.sendMessage(ChatColor.RED + "Failed to load " + args.getString(0));
@@ -208,8 +220,8 @@ public class TopLevelCommands {
         @CommandPermissions({"craftbook.disable-mechanic"})
         public void disable(CommandContext args, final CommandSender sender) throws CommandPermissionsException {
 
-            if(args.argsLength() > 0) {
-                if(CraftBookPlugin.inst().disableMechanic(args.getString(0)))
+            if (args.argsLength() > 0) {
+                if (CraftBookPlugin.inst().disableMechanic(args.getString(0)))
                     sender.sendMessage(ChatColor.YELLOW + "Sucessfully disabled " + args.getString(0));
                 else
                     sender.sendMessage(ChatColor.RED + "Failed to remove " + args.getString(0));
