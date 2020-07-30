@@ -1,27 +1,22 @@
 package com.sk89q.craftbook.mechanics;
 
 import com.mcsunnyside.craftbooklimiter.QuotaManager;
+import com.sk89q.craftbook.AbstractCraftBookMechanic;
+import com.sk89q.craftbook.ChangedSign;
 import com.sk89q.craftbook.CraftBookPlayer;
+import com.sk89q.craftbook.bukkit.BukkitCraftBookPlayer;
+import com.sk89q.craftbook.bukkit.CraftBookPlugin;
 import com.sk89q.craftbook.bukkit.util.CraftBookBukkitUtil;
+import com.sk89q.craftbook.util.*;
+import com.sk89q.craftbook.util.events.SignClickEvent;
+import com.sk89q.craftbook.util.events.SourcedBlockRedstoneEvent;
+import com.sk89q.util.yaml.YAMLProcessor;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.SignChangeEvent;
-
-import com.sk89q.craftbook.AbstractCraftBookMechanic;
-import com.sk89q.craftbook.ChangedSign;
-import com.sk89q.craftbook.bukkit.BukkitCraftBookPlayer;
-import com.sk89q.craftbook.bukkit.CraftBookPlugin;
-import com.sk89q.craftbook.util.BlockUtil;
-import com.sk89q.craftbook.util.EventUtil;
-import com.sk89q.craftbook.util.ParsingUtil;
-import com.sk89q.craftbook.util.ProtectionUtil;
-import com.sk89q.craftbook.util.SignUtil;
-import com.sk89q.craftbook.util.events.SignClickEvent;
-import com.sk89q.craftbook.util.events.SourcedBlockRedstoneEvent;
-import com.sk89q.util.yaml.YAMLProcessor;
 
 public class CommandSigns extends AbstractCraftBookMechanic {
 
@@ -61,17 +56,19 @@ public class CommandSigns extends AbstractCraftBookMechanic {
         CraftBookPlayer localPlayer = CraftBookPlugin.inst().wrapPlayer(event.getPlayer());
 
         if (!localPlayer.hasPermission("craftbook.mech.command.use")) {
-            if(CraftBookPlugin.inst().getConfiguration().showPermissionMessages)
+            if (CraftBookPlugin.inst().getConfiguration().showPermissionMessages)
                 localPlayer.printError("mech.use-permission");
             return;
         }
 
-        if(!ProtectionUtil.canUse(event.getPlayer(), event.getClickedBlock().getLocation(), event.getBlockFace(), event.getAction())) {
-            if(CraftBookPlugin.inst().getConfiguration().showPermissionMessages)
+        if (!ProtectionUtil.canUse(event.getPlayer(), event.getClickedBlock().getLocation(), event.getBlockFace(), event.getAction())) {
+            if (CraftBookPlugin.inst().getConfiguration().showPermissionMessages)
                 localPlayer.printError("area.use-permissions");
             return;
         }
-
+        if (!quotaManager.tickAndCheckNext(event.getClickedBlock().getLocation().getChunk(), true, this.getClass())) {
+            return;
+        }
         runCommandSign(s, localPlayer);
 
         event.setCancelled(true);

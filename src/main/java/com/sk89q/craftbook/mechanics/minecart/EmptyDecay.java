@@ -1,6 +1,10 @@
 package com.sk89q.craftbook.mechanics.minecart;
 
 import com.mcsunnyside.craftbooklimiter.QuotaManager;
+import com.sk89q.craftbook.AbstractCraftBookMechanic;
+import com.sk89q.craftbook.bukkit.CraftBookPlugin;
+import com.sk89q.craftbook.util.EventUtil;
+import com.sk89q.util.yaml.YAMLProcessor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.entity.minecart.RideableMinecart;
@@ -8,11 +12,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
-
-import com.sk89q.craftbook.AbstractCraftBookMechanic;
-import com.sk89q.craftbook.bukkit.CraftBookPlugin;
-import com.sk89q.craftbook.util.EventUtil;
-import com.sk89q.util.yaml.YAMLProcessor;
 
 public class EmptyDecay extends AbstractCraftBookMechanic {
 
@@ -23,12 +22,14 @@ public class EmptyDecay extends AbstractCraftBookMechanic {
     @EventHandler(priority = EventPriority.HIGH)
     public void onVehicleExit(VehicleExitEvent event) {
 
-        if(!EventUtil.passesFilter(event)) return;
+        if (!EventUtil.passesFilter(event)) return;
 
         Vehicle vehicle = event.getVehicle();
 
         if (!(vehicle instanceof RideableMinecart)) return;
-
+        if (!quotaManager.tickAndCheckNext(event.getExited().getLocation().getChunk(), true, this.getClass())) {
+            return;
+        }
         CraftBookPlugin.inst().getServer().getScheduler().runTaskLater(CraftBookPlugin.inst(), new Decay((RideableMinecart) vehicle), delay);
     }
 

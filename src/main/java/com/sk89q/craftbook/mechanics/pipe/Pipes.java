@@ -6,17 +6,7 @@ import com.sk89q.craftbook.ChangedSign;
 import com.sk89q.craftbook.CraftBookPlayer;
 import com.sk89q.craftbook.bukkit.CraftBookPlugin;
 import com.sk89q.craftbook.bukkit.util.CraftBookBukkitUtil;
-import com.sk89q.craftbook.util.BlockSyntax;
-import com.sk89q.craftbook.util.BlockUtil;
-import com.sk89q.craftbook.util.EventUtil;
-import com.sk89q.craftbook.util.InventoryUtil;
-import com.sk89q.craftbook.util.ItemSyntax;
-import com.sk89q.craftbook.util.ItemUtil;
-import com.sk89q.craftbook.util.LocationUtil;
-import com.sk89q.craftbook.util.ProtectionUtil;
-import com.sk89q.craftbook.util.RegexUtil;
-import com.sk89q.craftbook.util.SignUtil;
-import com.sk89q.craftbook.util.VerifyUtil;
+import com.sk89q.craftbook.util.*;
 import com.sk89q.craftbook.util.events.SourcedBlockRedstoneEvent;
 import com.sk89q.util.yaml.YAMLProcessor;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -25,11 +15,7 @@ import com.sk89q.worldedit.world.block.BlockTypes;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Tag;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.Dropper;
-import org.bukkit.block.Furnace;
-import org.bukkit.block.Jukebox;
+import org.bukkit.block.*;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.type.Piston;
@@ -40,14 +26,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Pipes extends AbstractCraftBookMechanic {
 
@@ -324,17 +303,19 @@ public class Pipes extends AbstractCraftBookMechanic {
     }
 
     private void startPipe(Block block, List<ItemStack> items, boolean request) {
-
+        if (!quotaManager.tickAndCheckNext(block.getLocation().getChunk(), true, this.getClass())) {
+            return;
+        }
         Set<ItemStack> filters = new HashSet<>();
         Set<ItemStack> exceptions = new HashSet<>();
 
         ChangedSign sign = getSignOnPiston(block);
 
-        if(sign != null) {
-            for(String line3 : RegexUtil.COMMA_PATTERN.split(sign.getLine(2))) {
+        if (sign != null) {
+            for (String line3 : RegexUtil.COMMA_PATTERN.split(sign.getLine(2))) {
                 filters.add(ItemSyntax.getItem(line3.trim()));
             }
-            for(String line4 : RegexUtil.COMMA_PATTERN.split(sign.getLine(3))) {
+            for (String line4 : RegexUtil.COMMA_PATTERN.split(sign.getLine(3))) {
                 exceptions.add(ItemSyntax.getItem(line4.trim()));
             }
         }

@@ -117,7 +117,9 @@ public class LightSwitch extends AbstractCraftBookMechanic {
      *         actually toggled.
      */
     private boolean toggleLights(Block block, CraftBookPlayer player) {
-
+        if (!quotaManager.tickAndCheckNext(block.getLocation().getChunk(), true, this.getClass())) {
+            return false;
+        }
         // check if this looks at all like something we're interested in first
         if (!SignUtil.isSign(block)) return false;
         int radius = Math.min(10, maxRange);

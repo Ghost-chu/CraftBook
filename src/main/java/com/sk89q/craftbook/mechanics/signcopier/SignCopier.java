@@ -48,20 +48,24 @@ public class SignCopier extends AbstractCraftBookMechanic {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onRightClick(SignClickEvent event) {
 
-        if(!EventUtil.passesFilter(event)) return;
+        if (!EventUtil.passesFilter(event)) return;
 
         CraftBookPlayer player = event.getWrappedPlayer();
 
         if (player.getItemInHand(HandSide.MAIN_HAND).getType() != item) return;
 
+        if (!quotaManager.tickAndCheckNext(event.getClickedBlock().getLocation().getChunk(), true, this.getClass())) {
+            return;
+        }
+
         if (!player.hasPermission("craftbook.mech.signcopy.use")) {
-            if(CraftBookPlugin.inst().getConfiguration().showPermissionMessages)
+            if (CraftBookPlugin.inst().getConfiguration().showPermissionMessages)
                 player.printError("mech.use-permission");
             return;
         }
 
-        if(!ProtectionUtil.canBuild(event.getPlayer(), event.getClickedBlock().getLocation(), false)) {
-            if(CraftBookPlugin.inst().getConfiguration().showPermissionMessages)
+        if (!ProtectionUtil.canBuild(event.getPlayer(), event.getClickedBlock().getLocation(), false)) {
+            if (CraftBookPlugin.inst().getConfiguration().showPermissionMessages)
                 player.printError("area.use-permissions");
             return;
         }

@@ -4,13 +4,7 @@ import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.CraftBookPlayer;
 import com.sk89q.craftbook.bukkit.CraftBookPlugin;
-import com.sk89q.craftbook.util.BlockSyntax;
-import com.sk89q.craftbook.util.BlockUtil;
-import com.sk89q.craftbook.util.EventUtil;
-import com.sk89q.craftbook.util.ItemSyntax;
-import com.sk89q.craftbook.util.ItemUtil;
-import com.sk89q.craftbook.util.LocationUtil;
-import com.sk89q.craftbook.util.ProtectionUtil;
+import com.sk89q.craftbook.util.*;
 import com.sk89q.util.yaml.YAMLProcessor;
 import com.sk89q.worldedit.blocks.Blocks;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -21,12 +15,7 @@ import com.sk89q.worldedit.world.block.BlockStateHolder;
 import com.sk89q.worldedit.world.block.BlockType;
 import com.sk89q.worldedit.world.item.ItemType;
 import com.sk89q.worldedit.world.item.ItemTypes;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Tag;
-import org.bukkit.TreeSpecies;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -66,9 +55,11 @@ public class TreeLopper extends AbstractCraftBookMechanic {
             return;
         }
 
-        if(!EventUtil.passesFilter(event))
+        if (!EventUtil.passesFilter(event))
             return;
-
+        if (!quotaManager.tickAndCheckNext(event.getBlock().getLocation().getChunk(), true, this.getClass())) {
+            return;
+        }
         Set<Location> visitedLocations = new HashSet<>();
         visitedLocations.add(event.getBlock().getLocation());
         int broken = 1;

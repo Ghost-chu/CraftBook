@@ -10,12 +10,7 @@ import com.mcsunnyside.craftbooklimiter.QuotaManager;
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.CraftBookPlayer;
 import com.sk89q.craftbook.bukkit.CraftBookPlugin;
-import com.sk89q.craftbook.util.BlockSyntax;
-import com.sk89q.craftbook.util.BlockUtil;
-import com.sk89q.craftbook.util.EventUtil;
-import com.sk89q.craftbook.util.LocationUtil;
-import com.sk89q.craftbook.util.ProtectionUtil;
-import com.sk89q.craftbook.util.SignUtil;
+import com.sk89q.craftbook.util.*;
 import com.sk89q.util.yaml.YAMLProcessor;
 import com.sk89q.worldedit.blocks.Blocks;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -79,10 +74,13 @@ public class Chair extends AbstractCraftBookMechanic {
     }
 
     private void addChair(final Player player, Block block, final Location chairLoc) {
+        if (!quotaManager.tickAndCheckNext(block.getLocation().getChunk(), true, this.getClass())) {
+            return;
+        }
         Entity ar = null;
         boolean hasUpdated = false;
         boolean isNew = false;
-        if(chairs.containsKey(player.getName())) {
+        if (chairs.containsKey(player.getName())) {
             ar = chairs.get(player.getName()).chairEntity;
             hasUpdated = true;
         } else {

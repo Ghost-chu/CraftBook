@@ -98,6 +98,9 @@ public class ChunkAnchor extends AbstractCraftBookMechanic {
         }
 
         if (shouldAnchor) {
+            if (!quotaManager.tickAndCheckNext(chunk, true, this.getClass())) {
+                return;
+            }
             chunk.addPluginChunkTicket(CraftBookPlugin.inst());
         } else {
             chunk.removePluginChunkTicket(CraftBookPlugin.inst());

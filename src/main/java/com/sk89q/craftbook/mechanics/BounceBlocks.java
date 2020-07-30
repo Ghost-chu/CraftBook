@@ -94,15 +94,17 @@ public class BounceBlocks extends AbstractCraftBookMechanic {
 
                 //Boom, headshot.
                 Block sign = block.getRelative(BlockFace.DOWN);
-
-                if(SignUtil.isSign(sign)) {
+                if (!quotaManager.tickAndCheckNext(event.getPlayer().getLocation().getChunk(), true, this.getClass())) {
+                    return;
+                }
+                if (SignUtil.isSign(sign)) {
                     final ChangedSign s = CraftBookBukkitUtil.toChangedSign(sign);
 
-                    if(s.getLine(1).equals("[Jump]")) {
+                    if (s.getLine(1).equals("[Jump]")) {
 
                         CraftBookPlugin.logDebugMessage("Jump sign found where player jumped!", "bounce-blocks");
 
-                        double x = 0,y,z = 0;
+                        double x = 0, y, z = 0;
                         boolean straight = s.getLine(2).startsWith("!");
 
                         String[] bits = RegexUtil.COMMA_PATTERN.split(StringUtils.replace(s.getLine(2), "!", ""));

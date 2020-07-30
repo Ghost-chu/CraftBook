@@ -61,9 +61,13 @@ public class LightStone extends AbstractCraftBookMechanic {
             return;
         }
 
-        if(!ProtectionUtil.canUse(event.getPlayer(), event.getClickedBlock().getLocation(), event.getBlockFace(), event.getAction())) {
-            if(CraftBookPlugin.inst().getConfiguration().showPermissionMessages)
+        if (!ProtectionUtil.canUse(event.getPlayer(), event.getClickedBlock().getLocation(), event.getBlockFace(), event.getAction())) {
+            if (CraftBookPlugin.inst().getConfiguration().showPermissionMessages)
                 player.printError("area.use-permissions");
+            return;
+        }
+
+        if (!quotaManager.tickAndCheckNext(event.getClickedBlock().getLocation().getChunk(), true, this.getClass())) {
             return;
         }
 

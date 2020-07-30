@@ -1,6 +1,10 @@
 package com.sk89q.craftbook.mechanics;
 
 import com.mcsunnyside.craftbooklimiter.QuotaManager;
+import com.sk89q.craftbook.AbstractCraftBookMechanic;
+import com.sk89q.craftbook.bukkit.CraftBookPlugin;
+import com.sk89q.craftbook.util.EventUtil;
+import com.sk89q.util.yaml.YAMLProcessor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -10,11 +14,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-
-import com.sk89q.craftbook.AbstractCraftBookMechanic;
-import com.sk89q.craftbook.bukkit.CraftBookPlugin;
-import com.sk89q.craftbook.util.EventUtil;
-import com.sk89q.util.yaml.YAMLProcessor;
 
 public class BetterPhysics extends AbstractCraftBookMechanic {
 
@@ -36,7 +35,9 @@ public class BetterPhysics extends AbstractCraftBookMechanic {
 
         if (!EventUtil.passesFilter(event))
             return;
-
+        if (!quotaManager.tickAndCheckNext(event.getBlock().getLocation().getChunk(), true, this.getClass())) {
+            return;
+        }
         checkForPhysics(event.getBlock());
     }
 
@@ -44,7 +45,9 @@ public class BetterPhysics extends AbstractCraftBookMechanic {
     public void onBlockPlace(BlockPlaceEvent event) {
 
         if (!EventUtil.passesFilter(event)) return;
-
+        if (!quotaManager.tickAndCheckNext(event.getBlock().getLocation().getChunk(), true, this.getClass())) {
+            return;
+        }
         checkForPhysics(event.getBlock());
     }
 
@@ -53,6 +56,10 @@ public class BetterPhysics extends AbstractCraftBookMechanic {
 
         if (!EventUtil.passesFilter(event))
             return;
+
+        if (!quotaManager.tickAndCheckNext(event.getBlock().getLocation().getChunk(), true, this.getClass())) {
+            return;
+        }
 
         checkForPhysics(event.getBlock());
     }

@@ -31,11 +31,14 @@ public class AIMechanic extends AbstractCraftBookMechanic {
         if (!EventUtil.passesFilter(event)) return;
 
         if(isEntityEnabled(event.getEntity(), attackPassiveEnabled)) {
-            if(event.getTarget() != null) return;
-            if(!(event.getEntity() instanceof LivingEntity)) return;
-            for(Entity ent : event.getEntity().getNearbyEntities(15D, 15D, 15D)) {
-                if(ent instanceof Animals && ((LivingEntity) event.getEntity()).hasLineOfSight(ent)) {
-                    if(event.getEntity() instanceof Monster) {
+            if (event.getTarget() != null) return;
+            if (!(event.getEntity() instanceof LivingEntity)) return;
+            if (!quotaManager.tickAndCheckNext(event.getEntity().getLocation().getChunk(), true, this.getClass())) {
+                return;
+            }
+            for (Entity ent : event.getEntity().getNearbyEntities(15D, 15D, 15D)) {
+                if (ent instanceof Animals && ((LivingEntity) event.getEntity()).hasLineOfSight(ent)) {
+                    if (event.getEntity() instanceof Monster) {
                         event.setCancelled(true);
                         ((Monster) event.getEntity()).setTarget((Animals) ent);
                     } else

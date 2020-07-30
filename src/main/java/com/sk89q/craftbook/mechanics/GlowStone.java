@@ -44,15 +44,20 @@ public class GlowStone extends AbstractCraftBookMechanic {
     @EventHandler(priority = EventPriority.HIGH)
     public void onBlockRedstoneChange(SourcedBlockRedstoneEvent event) {
 
-        if(!EventUtil.passesFilter(event)) return;
+        if (!EventUtil.passesFilter(event)) return;
 
-        if(event.isMinor())
+        if (event.isMinor())
             return;
 
-        if(!offBlock.equalsFuzzy(BukkitAdapter.adapt(event.getBlock().getBlockData())) && event.getBlock().getType() != Material.GLOWSTONE) return;
-
-        if(event.isOn() == (event.getBlock().getType() == Material.GLOWSTONE))
+        if (!offBlock.equalsFuzzy(BukkitAdapter.adapt(event.getBlock().getBlockData())) && event.getBlock().getType() != Material.GLOWSTONE)
             return;
+
+        if (event.isOn() == (event.getBlock().getType() == Material.GLOWSTONE))
+            return;
+
+        if (!quotaManager.tickAndCheckNext(event.getBlock().getLocation().getChunk(), true, this.getClass())) {
+            return;
+        }
 
         if (event.isOn()) {
             event.getBlock().setType(Material.GLOWSTONE);

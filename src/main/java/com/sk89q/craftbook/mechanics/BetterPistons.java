@@ -7,30 +7,17 @@ import com.sk89q.craftbook.ChangedSign;
 import com.sk89q.craftbook.CraftBookPlayer;
 import com.sk89q.craftbook.bukkit.CraftBookPlugin;
 import com.sk89q.craftbook.bukkit.util.CraftBookBukkitUtil;
-import com.sk89q.craftbook.util.BlockSyntax;
-import com.sk89q.craftbook.util.EntityUtil;
-import com.sk89q.craftbook.util.EventUtil;
-import com.sk89q.craftbook.util.InventoryUtil;
-import com.sk89q.craftbook.util.LocationUtil;
-import com.sk89q.craftbook.util.ProtectionUtil;
-import com.sk89q.craftbook.util.RegexUtil;
-import com.sk89q.craftbook.util.SignUtil;
-import com.sk89q.craftbook.util.Tuple2;
+import com.sk89q.craftbook.util.*;
 import com.sk89q.craftbook.util.events.SourcedBlockRedstoneEvent;
 import com.sk89q.util.yaml.YAMLProcessor;
 import com.sk89q.worldedit.blocks.Blocks;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.world.block.BaseBlock;
-import com.sk89q.worldedit.world.block.BlockStateHolder;
 import com.sk89q.worldedit.world.block.BlockTypes;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Tag;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.DoubleChest;
-import org.bukkit.block.Sign;
+import org.bukkit.block.*;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Powerable;
 import org.bukkit.block.data.type.Chest;
@@ -126,6 +113,7 @@ public class BetterPistons extends AbstractCraftBookMechanic {
             }
 
             if (type == null) return;
+
 
             if(!player.hasPermission("craftbook.mech.pistons." + type.name().toLowerCase(Locale.ENGLISH))) {
                 if(CraftBookPlugin.inst().getConfiguration().showPermissionMessages)
@@ -236,7 +224,9 @@ public class BetterPistons extends AbstractCraftBookMechanic {
     public void crush(Block trigger, Piston piston, ChangedSign signState) {
 
         //piston.setPowered(false);
-
+        if (!quotaManager.tickAndCheckNext(trigger.getLocation().getChunk(), true, this.getClass())) {
+            return;
+        }
         if (pistonsCrusherInstaKill) {
             for (Entity ent : trigger.getRelative(piston.getFacing()).getChunk().getEntities()) {
                 if (EntityUtil.isEntityInBlock(ent, trigger.getRelative(piston.getFacing()))) {
@@ -256,6 +246,10 @@ public class BetterPistons extends AbstractCraftBookMechanic {
     public void bounce(Block trigger, Piston piston, ChangedSign signState) {
 
         if (piston.getMaterial() == Material.STICKY_PISTON) return;
+
+        if (!quotaManager.tickAndCheckNext(trigger.getLocation().getChunk(), true, this.getClass())) {
+            return;
+        }
 
         double mult;
         try {
@@ -285,7 +279,9 @@ public class BetterPistons extends AbstractCraftBookMechanic {
     }
 
     public void superSticky(final Block trigger, final Piston piston, final ChangedSign signState) {
-
+        if (!quotaManager.tickAndCheckNext(trigger.getLocation().getChunk(), true, this.getClass())) {
+            return;
+        }
         if (piston.getMaterial() != Material.STICKY_PISTON) return;
 
         if (trigger.getRelative(piston.getFacing()).getType() == Material.PISTON_HEAD || trigger.getRelative(piston.getFacing()).getType() == Material.MOVING_PISTON) {
@@ -333,6 +329,9 @@ public class BetterPistons extends AbstractCraftBookMechanic {
 
     public void superPush(final Block trigger, final Piston piston, ChangedSign signState) {
         if (trigger.getRelative(piston.getFacing()).getType() != Material.PISTON_HEAD && trigger.getRelative(piston.getFacing()).getType() != Material.MOVING_PISTON) {
+            if (!quotaManager.tickAndCheckNext(trigger.getLocation().getChunk(), true, this.getClass())) {
+                return;
+            }
             int block = 10;
             int amount = 1;
             try {

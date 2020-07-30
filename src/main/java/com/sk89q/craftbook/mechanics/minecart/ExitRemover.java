@@ -1,6 +1,12 @@
 package com.sk89q.craftbook.mechanics.minecart;
 
 import com.mcsunnyside.craftbooklimiter.QuotaManager;
+import com.sk89q.craftbook.AbstractCraftBookMechanic;
+import com.sk89q.craftbook.bukkit.CraftBookPlugin;
+import com.sk89q.craftbook.util.CartUtil;
+import com.sk89q.craftbook.util.EntityUtil;
+import com.sk89q.craftbook.util.EventUtil;
+import com.sk89q.util.yaml.YAMLProcessor;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Minecart;
@@ -10,13 +16,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.inventory.ItemStack;
-
-import com.sk89q.craftbook.AbstractCraftBookMechanic;
-import com.sk89q.craftbook.bukkit.CraftBookPlugin;
-import com.sk89q.craftbook.util.CartUtil;
-import com.sk89q.craftbook.util.EntityUtil;
-import com.sk89q.craftbook.util.EventUtil;
-import com.sk89q.util.yaml.YAMLProcessor;
 
 public class ExitRemover extends AbstractCraftBookMechanic {
 
@@ -30,22 +29,26 @@ public class ExitRemover extends AbstractCraftBookMechanic {
         if (!(event.getVehicle() instanceof RideableMinecart)) return;
         if (event.getVehicle().isDead() || !event.getVehicle().isValid()) return;
 
-        if(!EventUtil.passesFilter(event)) return;
+        if (!EventUtil.passesFilter(event)) return;
 
-        if(CraftBookPlugin.inst().isMechanicEnabled(TemporaryCart.class)) {
-            if(((TemporaryCart) CraftBookPlugin.inst().getMechanic(TemporaryCart.class)).getMinecarts().contains(event.getVehicle()))
+        if (CraftBookPlugin.inst().isMechanicEnabled(TemporaryCart.class)) {
+            if (((TemporaryCart) CraftBookPlugin.inst().getMechanic(TemporaryCart.class)).getMinecarts().contains(event.getVehicle()))
                 return;
+        }
+
+        if (!quotaManager.tickAndCheckNext(event.getVehicle().getLocation().getChunk(), true, this.getClass())) {
+            return;
         }
 
         Bukkit.getScheduler().runTaskLater(CraftBookPlugin.inst(), () -> {
 
             if (event.getVehicle().isDead() || !event.getVehicle().isValid()) return;
 
-            if(giveItem) {
+            if (giveItem) {
 
                 ItemStack stack = CartUtil.getCartStack((Minecart) event.getVehicle());
 
-                if(event.getExited() instanceof Player) {
+                if (event.getExited() instanceof Player) {
                     if(!((Player) event.getExited()).getInventory().addItem(stack).isEmpty() && ((Player) event.getExited()).getGameMode() != GameMode.CREATIVE)
                         event.getExited().getWorld().dropItemNaturally(event.getExited().getLocation(), stack);
                 } else if(event.getExited() != null)

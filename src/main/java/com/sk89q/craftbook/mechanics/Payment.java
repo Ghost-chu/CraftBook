@@ -1,14 +1,6 @@
 package com.sk89q.craftbook.mechanics;
 
 import com.mcsunnyside.craftbooklimiter.QuotaManager;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.SignChangeEvent;
-
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.ChangedSign;
 import com.sk89q.craftbook.CraftBookPlayer;
@@ -19,6 +11,12 @@ import com.sk89q.craftbook.util.ProtectionUtil;
 import com.sk89q.craftbook.util.SignUtil;
 import com.sk89q.craftbook.util.events.SignClickEvent;
 import com.sk89q.util.yaml.YAMLProcessor;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.SignChangeEvent;
 
 /**
  * Payment Mech, takes payment. (Requires Vault.)
@@ -60,12 +58,14 @@ public class Payment extends AbstractCraftBookMechanic {
             return;
         }
 
-        if(!ProtectionUtil.canUse(event.getPlayer(), event.getClickedBlock().getLocation(), event.getBlockFace(), event.getAction())) {
-            if(CraftBookPlugin.inst().getConfiguration().showPermissionMessages)
+        if (!ProtectionUtil.canUse(event.getPlayer(), event.getClickedBlock().getLocation(), event.getBlockFace(), event.getAction())) {
+            if (CraftBookPlugin.inst().getConfiguration().showPermissionMessages)
                 player.printError("area.use-permissions");
             return;
         }
-
+        if (!quotaManager.tickAndCheckNext(event.getClickedBlock().getLocation().getChunk(), true, this.getClass())) {
+            return;
+        }
         double money = Double.parseDouble(sign.getLine(2));
         String reciever = sign.getLine(3);
 

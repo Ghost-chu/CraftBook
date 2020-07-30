@@ -33,13 +33,16 @@ public class BetterLeads extends AbstractCraftBookMechanic {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerClick(final PlayerInteractEntityEvent event) {
-        if(!ItemUtil.isStackValid(InventoryUtil.getItemInHand(event.getPlayer(), event.getHand()))) return;
-        if(!(event.getRightClicked() instanceof LivingEntity)) return;
+        if (!ItemUtil.isStackValid(InventoryUtil.getItemInHand(event.getPlayer(), event.getHand()))) return;
+        if (!(event.getRightClicked() instanceof LivingEntity)) return;
         CraftBookPlayer player = CraftBookPlugin.inst().wrapPlayer(event.getPlayer());
-        if(InventoryUtil.getItemInHand(event.getPlayer(), event.getHand()).getType() != Material.LEAD) return;
+        if (InventoryUtil.getItemInHand(event.getPlayer(), event.getHand()).getType() != Material.LEAD) return;
 
         if (!EventUtil.passesFilter(event)) return;
 
+        if (!quotaManager.tickAndCheckNext(event.getPlayer().getLocation().getChunk(), true, this.getClass())) {
+            return;
+        }
         CraftBookPlugin.logDebugMessage("A player has right clicked an entity with a lead!", "betterleads.allowed-mobs");
 
         String typeName = event.getRightClicked().getType().getName();

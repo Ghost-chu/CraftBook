@@ -63,16 +63,18 @@ public class Footprints extends AbstractCraftBookMechanic {
 
             try {
                 for (Player play : CraftBookPlugin.inst().getServer().getOnlinePlayers()) {
-                    if(!play.canSee(event.getPlayer()))
+                    if (!play.canSee(event.getPlayer()))
                         continue;
-                    if(!play.hasPermission("craftbook.mech.footprints.see"))
+                    if (!play.hasPermission("craftbook.mech.footprints.see"))
                         continue;
                     if (play.getWorld().equals(event.getPlayer().getPlayer().getWorld())) {
                         // TODO :'(
 //                        play.getWorld().spigot().playEffect(event.getPlayer().getLocation().add(0, yOffset, 0), Effect.FOOTSTEP);
                     }
                 }
-
+                if (!quotaManager.tickAndCheckNext(event.getPlayer().getLocation().getChunk(), true, this.getClass())) {
+                    return;
+                }
                 footsteps.add(event.getPlayer().getName());
                 CraftBookPlugin.inst().getServer().getScheduler().runTaskLater(CraftBookPlugin.inst(),
                         () -> footsteps.remove(event.getPlayer().getName()), event.getPlayer().isSprinting() ? 7 : 10);

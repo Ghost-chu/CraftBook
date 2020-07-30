@@ -25,10 +25,12 @@ public class ItemPickup extends AbstractCraftBookMechanic {
         if(!EventUtil.passesFilter(event)) return;
 
         if (event.getVehicle() instanceof StorageMinecart && event.getEntity() instanceof Item) {
-
+            if (!quotaManager.tickAndCheckNext(event.getVehicle().getLocation().getChunk(), true, this.getClass())) {
+                return;
+            }
             StorageMinecart cart = (StorageMinecart) event.getVehicle();
             Collection<ItemStack> leftovers = cart.getInventory().addItem(((Item) event.getEntity()).getItemStack()).values();
-            if(leftovers.isEmpty())
+            if (leftovers.isEmpty())
                 event.getEntity().remove();
             else
                 ((Item) event.getEntity()).setItemStack(leftovers.toArray(new ItemStack[1])[0]);

@@ -1,6 +1,9 @@
 package com.sk89q.craftbook.mechanics.minecart;
 
 import com.mcsunnyside.craftbooklimiter.QuotaManager;
+import com.sk89q.craftbook.AbstractCraftBookMechanic;
+import com.sk89q.craftbook.util.EventUtil;
+import com.sk89q.util.yaml.YAMLProcessor;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
@@ -11,10 +14,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
 import org.bukkit.util.Vector;
-
-import com.sk89q.craftbook.AbstractCraftBookMechanic;
-import com.sk89q.craftbook.util.EventUtil;
-import com.sk89q.util.yaml.YAMLProcessor;
 
 
 public class MoreRails extends AbstractCraftBookMechanic {
@@ -35,10 +34,12 @@ public class MoreRails extends AbstractCraftBookMechanic {
     @EventHandler(priority = EventPriority.HIGH)
     public void onVehicleMove(VehicleMoveEvent event) {
 
-        if(!EventUtil.passesFilter(event)) return;
+        if (!EventUtil.passesFilter(event)) return;
 
         if (!(event.getVehicle() instanceof Minecart)) return;
-
+        if (!quotaManager.tickAndCheckNext(event.getVehicle().getLocation().getChunk(), true, this.getClass())) {
+            return;
+        }
         if (pressurePlate)
             if (event.getTo().getBlock().getType() == Material.STONE_PRESSURE_PLATE
                     || Tag.WOODEN_PRESSURE_PLATES.isTagged(event.getTo().getBlock().getType())

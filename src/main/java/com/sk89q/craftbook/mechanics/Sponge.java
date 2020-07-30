@@ -1,7 +1,13 @@
 package com.sk89q.craftbook.mechanics;
 
 import com.mcsunnyside.craftbooklimiter.QuotaManager;
+import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.bukkit.CraftBookPlugin;
+import com.sk89q.craftbook.util.BlockUtil;
+import com.sk89q.craftbook.util.EventUtil;
+import com.sk89q.craftbook.util.LocationUtil;
+import com.sk89q.craftbook.util.events.SourcedBlockRedstoneEvent;
+import com.sk89q.util.yaml.YAMLProcessor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -10,13 +16,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-
-import com.sk89q.craftbook.AbstractCraftBookMechanic;
-import com.sk89q.craftbook.util.BlockUtil;
-import com.sk89q.craftbook.util.EventUtil;
-import com.sk89q.craftbook.util.LocationUtil;
-import com.sk89q.craftbook.util.events.SourcedBlockRedstoneEvent;
-import com.sk89q.util.yaml.YAMLProcessor;
 
 public class Sponge extends AbstractCraftBookMechanic {
 
@@ -35,8 +34,10 @@ public class Sponge extends AbstractCraftBookMechanic {
 
         if(!BlockUtil.isBlockReplacable(event.getToBlock().getType())) return;
 
-        if(!EventUtil.passesFilter(event)) return;
-
+        if (!EventUtil.passesFilter(event)) return;
+        if (!quotaManager.tickAndCheckNext(event.getBlock().getLocation().getChunk(), true, this.getClass())) {
+            return;
+        }
         for (int cx = -radius; cx <= radius; cx++) {
             for (int cy = -radius; cy <= radius; cy++) {
                 for (int cz = -radius; cz <= radius; cz++) {
@@ -93,6 +94,9 @@ public class Sponge extends AbstractCraftBookMechanic {
     }
 
     public void removeWater(Block block) {
+        if (!quotaManager.tickAndCheckNext(block.getLocation().getChunk(), true, this.getClass())) {
+            return;
+        }
         for (int cx = -radius; cx <= radius; cx++) {
             for (int cy = -radius; cy <= radius; cy++) {
                 for (int cz = -radius; cz <= radius; cz++) {

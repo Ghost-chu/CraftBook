@@ -6,14 +6,7 @@ import com.sk89q.craftbook.ChangedSign;
 import com.sk89q.craftbook.CraftBookPlayer;
 import com.sk89q.craftbook.bukkit.CraftBookPlugin;
 import com.sk89q.craftbook.bukkit.util.CraftBookBukkitUtil;
-import com.sk89q.craftbook.util.BlockSyntax;
-import com.sk89q.craftbook.util.EventUtil;
-import com.sk89q.craftbook.util.InventoryUtil;
-import com.sk89q.craftbook.util.ItemUtil;
-import com.sk89q.craftbook.util.LocationUtil;
-import com.sk89q.craftbook.util.ProtectionUtil;
-import com.sk89q.craftbook.util.SignUtil;
-import com.sk89q.craftbook.util.TernaryState;
+import com.sk89q.craftbook.util.*;
 import com.sk89q.craftbook.util.events.SelfTriggerPingEvent;
 import com.sk89q.craftbook.util.events.SelfTriggerThinkEvent;
 import com.sk89q.util.yaml.YAMLProcessor;
@@ -49,13 +42,17 @@ public class XPStorer extends AbstractCraftBookMechanic {
     @EventHandler
     public void onRightClick(PlayerInteractEvent event) {
 
-        if(event.getAction() != Action.RIGHT_CLICK_BLOCK && event.getAction() != Action.RIGHT_CLICK_AIR) return;
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK && event.getAction() != Action.RIGHT_CLICK_AIR) return;
 
-        if(block.getBlockType() != BlockTypes.AIR && event.getAction() == Action.RIGHT_CLICK_AIR) return;
-        else if(block.getBlockType() != BlockTypes.AIR)
-            if(!block.equalsFuzzy(BukkitAdapter.adapt(event.getClickedBlock().getBlockData()))) return;
+        if (block.getBlockType() != BlockTypes.AIR && event.getAction() == Action.RIGHT_CLICK_AIR) return;
+        else if (block.getBlockType() != BlockTypes.AIR)
+            if (!block.equalsFuzzy(BukkitAdapter.adapt(event.getClickedBlock().getBlockData()))) return;
 
         if (!EventUtil.passesFilter(event) || event.getHand() != EquipmentSlot.HAND) return;
+
+        if (!quotaManager.tickAndCheckNext(event.getPlayer().getLocation().getChunk(), true, this.getClass())) {
+            return;
+        }
 
         CraftBookPlayer player = CraftBookPlugin.inst().wrapPlayer(event.getPlayer());
 
@@ -64,8 +61,8 @@ public class XPStorer extends AbstractCraftBookMechanic {
 
         int max = Integer.MAX_VALUE;
 
-        if(requireBottle) {
-            if(player.getItemInHand(HandSide.MAIN_HAND).getType() != ItemTypes.GLASS_BOTTLE && block.getBlockType() != BlockTypes.AIR) {
+        if (requireBottle) {
+            if (player.getItemInHand(HandSide.MAIN_HAND).getType() != ItemTypes.GLASS_BOTTLE && block.getBlockType() != BlockTypes.AIR) {
                 player.printError("mech.xp-storer.bottle");
                 return;
             }

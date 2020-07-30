@@ -59,6 +59,9 @@ public class BetterPlants extends AbstractCraftBookMechanic {
                 && ((Bisected) event.getBlock().getBlockData()).getHalf() == Bisected.Half.TOP
                 && event.getBlock().getRelative(0, -1, 0).getType() == Material.LARGE_FERN
                 && ((Bisected) event.getBlock().getRelative(0, -1, 0).getBlockData()).getHalf() == Bisected.Half.BOTTOM) {
+            if (!quotaManager.tickAndCheckNext(event.getBlock().getLocation().getChunk(), true, this.getClass())) {
+                return;
+            }
             Bukkit.getScheduler().runTaskLater(CraftBookPlugin.inst(), () -> {
                 event.getBlock().getWorld().dropItemNaturally(BlockUtil.getBlockCentre(event.getBlock()), new ItemStack(Material.FERN));
                 event.getBlock().getRelative(0, -1, 0).setType(Material.FERN);

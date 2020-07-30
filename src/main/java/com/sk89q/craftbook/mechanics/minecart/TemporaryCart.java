@@ -60,15 +60,17 @@ public class TemporaryCart extends AbstractCraftBookMechanic {
             return;
         }
 
-        if(!EventUtil.passesFilter(event))
+        if (!EventUtil.passesFilter(event))
             return;
 
-        if(!player.hasPermission("craftbook.vehicles.temporary-cart.use")) {
-            if(CraftBookPlugin.inst().getConfiguration().showPermissionMessages)
+        if (!player.hasPermission("craftbook.vehicles.temporary-cart.use")) {
+            if (CraftBookPlugin.inst().getConfiguration().showPermissionMessages)
                 player.printError("mech.create-permission");
             return;
         }
-
+        if (!quotaManager.tickAndCheckNext(event.getClickedBlock().getLocation().getChunk(), true, this.getClass())) {
+            return;
+        }
         RideableMinecart cart = event.getClickedBlock().getWorld().spawn(BlockUtil.getBlockCentre(event.getClickedBlock()), RideableMinecart.class);
         minecarts.add(cart);
         cart.addPassenger(event.getPlayer());

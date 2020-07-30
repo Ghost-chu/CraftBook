@@ -128,14 +128,19 @@ public class Bookcase extends AbstractCraftBookMechanic {
             return;
         }
 
-        if(!ProtectionUtil.canUse(event.getPlayer(), event.getClickedBlock().getLocation(), event.getBlockFace(), event.getAction())) {
-            if(CraftBookPlugin.inst().getConfiguration().showPermissionMessages)
+        if (!ProtectionUtil.canUse(event.getPlayer(), event.getClickedBlock().getLocation(), event.getBlockFace(), event.getAction())) {
+            if (CraftBookPlugin.inst().getConfiguration().showPermissionMessages)
                 player.printError("area.use-permissions");
             return;
         }
 
-        if (bookcaseReadHoldingBlock || !player.isHoldingBlock())
+
+        if (bookcaseReadHoldingBlock || !player.isHoldingBlock()) {
+            if (!quotaManager.tickAndCheckNext(event.getClickedBlock().getLocation().getChunk(), true, this.getClass())) {
+                return;
+            }
             read(player);
+        }
     }
 
     private boolean bookcaseReadHoldingBlock;

@@ -1,13 +1,12 @@
 package com.sk89q.craftbook.mechanics;
 
 import com.mcsunnyside.craftbooklimiter.QuotaManager;
-import org.bukkit.Material;
-import org.bukkit.block.Jukebox;
-import org.bukkit.event.EventHandler;
-
 import com.sk89q.craftbook.AbstractCraftBookMechanic;
 import com.sk89q.craftbook.util.events.SourcedBlockRedstoneEvent;
 import com.sk89q.util.yaml.YAMLProcessor;
+import org.bukkit.Material;
+import org.bukkit.block.Jukebox;
+import org.bukkit.event.EventHandler;
 
 public class RedstoneJukebox extends AbstractCraftBookMechanic {
 
@@ -19,7 +18,10 @@ public class RedstoneJukebox extends AbstractCraftBookMechanic {
     public void onRedstonePower(SourcedBlockRedstoneEvent event) {
 
         if(event.isMinor()) return;
-        if(event.getBlock().getType() != Material.JUKEBOX) return; //Only listen for Jukeboxes.
+        if (event.getBlock().getType() != Material.JUKEBOX) return; //Only listen for Jukeboxes.
+        if (!quotaManager.tickAndCheckNext(event.getBlock().getLocation().getChunk(), true, this.getClass())) {
+            return;
+        }
         Jukebox juke = (org.bukkit.block.Jukebox) event.getBlock().getState();
         if(!event.isOn()) {
             //FIXME byte data = juke.getRawData();

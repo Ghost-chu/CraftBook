@@ -23,20 +23,12 @@ import com.sk89q.craftbook.CraftBookPlayer;
 import com.sk89q.craftbook.bukkit.BukkitCraftBookPlayer;
 import com.sk89q.craftbook.bukkit.CraftBookPlugin;
 import com.sk89q.craftbook.bukkit.util.CraftBookBukkitUtil;
-import com.sk89q.craftbook.util.EventUtil;
-import com.sk89q.craftbook.util.LocationUtil;
-import com.sk89q.craftbook.util.ProtectionUtil;
-import com.sk89q.craftbook.util.RegexUtil;
-import com.sk89q.craftbook.util.SignUtil;
+import com.sk89q.craftbook.util.*;
 import com.sk89q.craftbook.util.events.SignClickEvent;
 import com.sk89q.craftbook.util.events.SourcedBlockRedstoneEvent;
 import com.sk89q.util.yaml.YAMLProcessor;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.Tag;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Switch;
@@ -54,11 +46,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * The default elevator mechanism -- wall signs in a vertical column that teleport the player vertically when triggered.
@@ -369,16 +357,18 @@ public class Elevator extends AbstractCraftBookMechanic {
     }
 
     public void teleportPlayer(final CraftBookPlayer player, final Block floor, final Block destination, final BlockFace shift) {
-
+        if (!quotaManager.tickAndCheckNext(floor.getLocation().getChunk(), true, this.getClass())) {
+            return;
+        }
         final Location newLocation = CraftBookBukkitUtil.toLocation(player.getLocation());
         newLocation.setY(floor.getY() + 1);
 
-        if(elevatorSlowMove) {
+        if (elevatorSlowMove) {
 
             final Location lastLocation = CraftBookBukkitUtil.toLocation(player.getLocation());
 
             if (player.isInsideVehicle()) {
-                Player bukkitPlayer = ((BukkitCraftBookPlayer)player).getPlayer();
+                Player bukkitPlayer = ((BukkitCraftBookPlayer) player).getPlayer();
                 playerVehicles.put(player.getUniqueId(), bukkitPlayer.getVehicle());
 
                 LocationUtil.ejectAndTeleportPlayerVehicle(player, newLocation);

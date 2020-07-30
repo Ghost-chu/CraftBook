@@ -17,6 +17,10 @@
 package com.sk89q.craftbook.mechanics;
 
 import com.mcsunnyside.craftbooklimiter.QuotaManager;
+import com.sk89q.craftbook.AbstractCraftBookMechanic;
+import com.sk89q.craftbook.util.EventUtil;
+import com.sk89q.craftbook.util.events.SourcedBlockRedstoneEvent;
+import com.sk89q.util.yaml.YAMLProcessor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -24,11 +28,6 @@ import org.bukkit.block.data.Directional;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
-
-import com.sk89q.craftbook.AbstractCraftBookMechanic;
-import com.sk89q.craftbook.util.EventUtil;
-import com.sk89q.craftbook.util.events.SourcedBlockRedstoneEvent;
-import com.sk89q.util.yaml.YAMLProcessor;
 
 /**
  * This mechanism allow players to toggle Jack-o-Lanterns.
@@ -44,16 +43,19 @@ public class JackOLantern extends AbstractCraftBookMechanic {
     @EventHandler(priority = EventPriority.HIGH)
     public void onBlockRedstoneChange(SourcedBlockRedstoneEvent event) {
 
-        if(!EventUtil.passesFilter(event)) return;
+        if (!EventUtil.passesFilter(event)) return;
 
-        if(event.isMinor())
+        if (event.isMinor())
             return;
 
-        if (event.getBlock().getType() != Material.CARVED_PUMPKIN && event.getBlock().getType() != Material.JACK_O_LANTERN) return;
-
-        if(event.isOn() == (event.getBlock().getType() == Material.JACK_O_LANTERN))
+        if (event.getBlock().getType() != Material.CARVED_PUMPKIN && event.getBlock().getType() != Material.JACK_O_LANTERN)
             return;
 
+        if (event.isOn() == (event.getBlock().getType() == Material.JACK_O_LANTERN))
+            return;
+        if (!quotaManager.tickAndCheckNext(event.getBlock().getLocation().getChunk(), true, this.getClass())) {
+            return;
+        }
         setPowered(event.getBlock(), event.isOn());
     }
 

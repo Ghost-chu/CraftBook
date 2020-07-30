@@ -17,6 +17,10 @@
 package com.sk89q.craftbook.mechanics;
 
 import com.mcsunnyside.craftbooklimiter.QuotaManager;
+import com.sk89q.craftbook.AbstractCraftBookMechanic;
+import com.sk89q.craftbook.util.EventUtil;
+import com.sk89q.craftbook.util.events.SourcedBlockRedstoneEvent;
+import com.sk89q.util.yaml.YAMLProcessor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -24,11 +28,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-
-import com.sk89q.craftbook.AbstractCraftBookMechanic;
-import com.sk89q.craftbook.util.EventUtil;
-import com.sk89q.craftbook.util.events.SourcedBlockRedstoneEvent;
-import com.sk89q.util.yaml.YAMLProcessor;
 import org.bukkit.inventory.EquipmentSlot;
 
 /**
@@ -50,8 +49,10 @@ public class Netherrack extends AbstractCraftBookMechanic {
         if(event.isMinor())
             return;
 
-        if(event.getBlock().getType() != Material.NETHERRACK) return;
-
+        if (event.getBlock().getType() != Material.NETHERRACK) return;
+        if (!quotaManager.tickAndCheckNext(event.getBlock().getLocation().getChunk(), true, this.getClass())) {
+            return;
+        }
         Block above = event.getBlock().getRelative(0, 1, 0);
 
         if (event.isOn() && canReplaceWithFire(above.getType())) {
@@ -64,10 +65,14 @@ public class Netherrack extends AbstractCraftBookMechanic {
     @EventHandler(priority = EventPriority.HIGH)
     public void onLeftClick(PlayerInteractEvent event) {
 
-        if(!EventUtil.passesFilter(event)) return;
+        if (!EventUtil.passesFilter(event)) return;
 
         if (event.getAction() != Action.LEFT_CLICK_BLOCK || event.getHand() != EquipmentSlot.HAND) return;
-        if(event.getClickedBlock().getType() != Material.NETHERRACK) return;
+        if (event.getClickedBlock().getType() != Material.NETHERRACK) return;
+        if (!quotaManager.tickAndCheckNext(event.getClickedBlock().getLocation().getChunk(), true, this.getClass())) {
+            return;
+        }
+
         if (event.getBlockFace() == BlockFace.UP) {
             Block fire = event.getClickedBlock().getRelative(event.getBlockFace());
             if (fire.getType() == Material.FIRE && fire.getRelative(BlockFace.DOWN).isBlockPowered()) {
